@@ -1,0 +1,6 @@
+<launch>
+    <!-- Launch the point cloud transformer node -->
+    <node pkg="lidar_camera_gt" type="publish_lidar_points_gt.py" name="occupancy_grid_transformer" output="screen">
+    </node>
+</launch>
+
