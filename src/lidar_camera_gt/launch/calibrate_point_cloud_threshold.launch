@@ -1,0 +1,6 @@
+<launch>
+    <!-- Launch the point cloud transformer node -->
+    <node pkg="lidar_camera_gt" type="calibrate_point_cloud_threshold.py" name="occupancy_grid_threshold_calibrator" output="screen">
+    </node>
+</launch>
+
