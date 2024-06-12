@@ -1,0 +1,11 @@
+int64 bbox_id
+float64 x1
+float64 y1
+float64 x2
+float64 y2
+float64 dx1
+float64 dy1
+float64 dx2
+float64 dy2
+string class_name
+float64 confidence,
