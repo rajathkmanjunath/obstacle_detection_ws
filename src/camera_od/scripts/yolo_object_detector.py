@@ -1,8 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import json
 import rospy
 from std_msgs.msg import String
+from camera_od.msg import CameraODArray
 import socket
 import ctypes
 import struct
@@ -39,7 +40,7 @@ UDP_PORT = 5000
 offset = 4
 
 def parse_data(socket):
-    pub = rospy.Publisher('camera_od_topic', String, queue_size=10)
+    pub = rospy.Publisher('camera_od_topic', CameraODArray, queue_size=10)
     rospy.init_node('camera_object_detector', anonymous=True)
     try:
         while True:
