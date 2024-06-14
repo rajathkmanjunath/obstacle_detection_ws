@@ -8,4 +8,4 @@ float64 dy1
 float64 dx2
 float64 dy2
 string class_name
-float64 confidence,
+float64 confidence
