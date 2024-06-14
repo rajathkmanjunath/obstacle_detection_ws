@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import datetime
+from  datetime import datetime
+import os
 import rospy
 from std_msgs.msg import String
 import time
@@ -8,6 +9,7 @@ from threading import Timer
 
 global detected, brake_name, brake_status
 service_name = 'LIDAR_THR'
+directory = '/tmp/log'
 
 class TopicLogger:
     def __init__(self):
@@ -22,7 +24,7 @@ class TopicLogger:
         # TODO: Rename the topics to follow camel case
         rospy.Subscriber('camera_od_topic', String, self.camera_od_callback)
 
-        rospy.Timer(rospy.Duration(self.evaluation_frequency), self.check_and_play_sound)
+        # rospy.Timer(rospy.Duration(self.evaluation_frequency), self.check_and_play_sound)
 
     def lidar_callback(self, msg):
         detected = True
@@ -34,8 +36,8 @@ class TopicLogger:
         self.log_time('Object detected on Camera')
 
     def log_time(self, message):
-        with open(datetime.now().strftime('/tmp/log/obstacles_log_%H_%M_%d_%m_%Y.csv'), 'a') as f:
-            f.write(f"{message}: {time.time()}\n")
+        with open(os.path.join(directory, datetime.now().strftime('obstacles_log_%H_%M_%d_%m_%Y.csv')), 'a') as f:
+            f.write("%s: %f\n" % (message, time.time()))
 
 def brake_status_callback(msg):
     global brake_status,brake_name
@@ -47,8 +49,12 @@ def brake_status_callback(msg):
 
 if __name__ == '__main__':
     rospy.init_node('topic_logger', anonymous=True)
-    topic_logger = TopicLogger()
 
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    topic_logger = TopicLogger()
+    rospy.spin()
+    '''
     rospy.wait_for_service('emergencyStop')
     emergencyStopSrv=rospy.ServiceProxy('emergencyStop',emergencyStop)
     rospy.Subscriber("/brake_status",String,brake_status_callback,queue_size=1)
@@ -64,3 +70,4 @@ if __name__ == '__main__':
                 emergencyStopSrv(0,0,service_name)
         detected = False
         rate.sleep()
+    '''

@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 
 import rospy
+import sensor_msgs.point_cloud2 as pc2
 from sensor_msgs.msg import PointCloud2
 from std_msgs.msg import String
+import numpy as np
 
 def point_cloud_callback(msg):
-    # Placeholder logic to detect obstacles in the point cloud
-    obstacle_detected = False  # Implement your obstacle detection logic here
+    point_array = np.array(list(pc2.read_points(msg, skip_nans=True)))
+    obstacle_detected = (point_array.size != 0) 
 
     if obstacle_detected:
         obstacle_msg = String()
-        obstacle_msg.data = "Obstacle detected on Lidar!"
+        obstacle_msg.data = "Obstacle detected!"
         pub.publish(obstacle_msg)
 
 if __name__ == '__main__':
