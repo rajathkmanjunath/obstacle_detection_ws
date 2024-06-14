@@ -3,7 +3,7 @@
 import json
 import rospy
 from std_msgs.msg import String
-from camera_od.msg import CameraODArray
+from camera_od.msg import CameraOD, CameraODArray
 import socket
 import ctypes
 import struct
@@ -49,7 +49,8 @@ def parse_data(socket):
                 deserialized_data = data
                 bbox_num = struct.unpack('<i', deserialized_data[:4])[0]
 
-                parsed_data = []
+                camera_od_array = CameraODArray()
+                parse_data = []
 
                 for bbox_id in range(0, bbox_num):
                     offset = 4
@@ -59,25 +60,24 @@ def parse_data(socket):
                     bbox_bytes = deserialized_data[start: end]
                     bbox = ctypes.cast(bbox_bytes, ctypes.POINTER(NmsBbox)).contents
                     class_name = coco_names[bbox.class_id]
+                    camera_od = CameraOD()
+                    camera_od.bbox_id = bbox_id
+                    camera_od.x1 = bbox.x1
+                    camera_od.y1 = bbox.y1
+                    camera_od.x2 = bbox.x2
+                    camera_od.y2 = bbox.y2
+                    camera_od.dx1 = bbox.dx1
+                    camera_od.dy1 = bbox.dy1
+                    camera_od.dx2 = bbox.dx2
+                    camera_od.dy2 = bbox.dy2
+                    camera_od.class_name = class_name
+                    camera_od.confidence = bbox.conf
 
-                    bbox_info = {
-                        'bbox_id': bbox_id,
-                        'x1': bbox.x1,
-                        'y1': bbox.y1,
-                        'x2': bbox.x2,
-                        'y2': bbox.y2,
-                        'dx1': bbox.dx1,
-                        'dy1': bbox.dy1,
-                        'dx2': bbox.dx2,
-                        'dy2': bbox.dy2,
-                        'class_name': class_name,
-                        'confidence': bbox.conf
-                    }
-
-                    parsed_data.append(bbox_info)
+                    camera_od_array.detections.append(camera_od)
 
                 # Publish parsed data to ROS topic
-                pub.publish(json.dumps(parsed_data))
+                pub.publish(camera_od_array)
+
 
             except Exception as e:
                 rospy.logerr("Error parsing data: %s", str(e))

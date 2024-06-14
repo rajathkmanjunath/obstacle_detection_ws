@@ -1,14 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 from std_msgs.msg import String
 from camera_od.msg import CameraODArray  # Adjust import based on your custom message type
 
 def camera_callback(msg):
-    if msg.y2 >= 480:
-        obstacle_msg = String()
-        obstacle_msg.data = f"Obstacle detected on camera: {msg.class_name}"
-        pub.publish(obstacle_msg)
+    for obstacle in msg.detections:
+        if obstacle.y2 <= 480:
+            obstacle_msg = String()
+            obstacle_msg.data = f"Obstacle detected on camera: {obstacle.class_name}"
+            pub.publish(obstacle_msg)
 
 if __name__ == '__main__':
     rospy.init_node('camera_obstacle_detector')
