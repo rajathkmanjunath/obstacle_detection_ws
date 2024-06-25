@@ -17,7 +17,7 @@ class OccupancyGridTransformer:
     def occupancy_grid_callback(self, msg):
         try:
             # Wait for the transform from 'velodyne' to 'base_link' to be available
-            self.tf_listener.waitForTransform('/base_link', '/velodyne', rospy.Time(0), rospy.Duration(1.0))
+            self.tf_listener.waitForTransform('/base_link', '/velodyne', rospy.Time(0), rospy.Duration(0.1))
             
             # Get the transformation
             (trans, rot) = self.tf_listener.lookupTransform('/base_link', '/velodyne', rospy.Time(0))

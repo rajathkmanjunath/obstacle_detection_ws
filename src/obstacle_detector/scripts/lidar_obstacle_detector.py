@@ -18,7 +18,7 @@ def point_cloud_callback(msg):
 if __name__ == '__main__':
     rospy.init_node('lidar_obstacle_detector')
     
-    pub = rospy.Publisher('lidar_obstacle_topic', String, queue_size=10)
-    rospy.Subscriber('local_map_transformed', PointCloud2, point_cloud_callback)
+    pub = rospy.Publisher('/lidar_obstacle_topic', String, queue_size=10)
+    rospy.Subscriber('/local_map_transformed', PointCloud2, point_cloud_callback)
     
     rospy.spin()
