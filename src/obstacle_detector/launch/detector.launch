@@ -1,3 +1,4 @@
 <launch>
   <node name="camera_detector" pkg="obstacle_detector" type="camera_obstacle_detector.py" output="screen"/>
+  <node name="lidar_detector" pkg="obstacle_detector" type="lidar_obstacle_detector.py" output="screen"/>
 </launch>

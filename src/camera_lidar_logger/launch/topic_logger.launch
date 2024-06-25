@@ -1,3 +1,0 @@
-<launch>
-    <node name="topic_logger" pkg="camera_lidar_logger" type="topic_logger.py" output="screen"/>
-</launch>
