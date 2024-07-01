@@ -1,0 +1,3 @@
+<launch>
+  <node name="record_event" pkg="event_recorder" type="screen_recorder.py" output="screen"/>
+</launch>
